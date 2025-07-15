@@ -8,6 +8,6 @@
 	"version": "v1.0.0",
 	"developer": "vinsterplays",
 	"description": "Prevents the game from thinking alt is held after alt+tab",
-	"repository": "",
+	"repository": "https://github.com/Vinsterplays/Alt-Tab-Fix",
 	"tags": ["universal", "enhancement", "bugfix"]
 }
