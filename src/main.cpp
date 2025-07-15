@@ -8,7 +8,7 @@ LONG_PTR oWindowProc;
 bool newWindowProcSet = false;
 
 LRESULT CALLBACK nWindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
-    if(msg == WM_KILLFOCUS) {
+    if(msg == WM_SETFOCUS) {
         if (CCDirector* CCDirector = cocos2d::CCDirector::get()) {
             CCDirector->getKeyboardDispatcher()->updateModifierKeys(false, false, false, false);
         }
