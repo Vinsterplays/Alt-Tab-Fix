@@ -8,10 +8,12 @@ LONG_PTR oWindowProc;
 bool newWindowProcSet = false;
 
 LRESULT CALLBACK nWindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
-    if(msg == WM_SETFOCUS) {
-        if (CCDirector* CCDirector = cocos2d::CCDirector::get()) {
-            CCDirector->getKeyboardDispatcher()->updateModifierKeys(false, false, false, false);
-        }
+    if(msg == WM_KILLFOCUS) {
+        geode::queueInMainThread([] {
+            if (CCDirector* CCDirector = cocos2d::CCDirector::get()) {
+                CCDirector->getKeyboardDispatcher()->updateModifierKeys(false, false, false, false);
+            }
+        });
     }
 
     return CallWindowProc((WNDPROC)oWindowProc, hwnd, msg, wparam, lparam);

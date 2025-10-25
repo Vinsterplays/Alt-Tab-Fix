@@ -1,11 +1,11 @@
 {
-	"geode": "4.6.3",
+	"geode": "4.8.0",
 	"gd": {
 		"win": "2.2074"
 	},
 	"id": "vinsterplays.alt_tab_fix",
 	"name": "Alt Tab Fix",
-	"version": "v1.1.0",
+	"version": "v1.2.0",
 	"developer": "vinsterplays",
 	"description": "Prevents the game from thinking alt is held after alt+tab",
 	"repository": "https://github.com/Vinsterplays/Alt-Tab-Fix",
