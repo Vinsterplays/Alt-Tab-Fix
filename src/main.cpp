@@ -1,49 +1,29 @@
-static HWINEVENTHOOK g_fgHook = nullptr;
-static HWINEVENTHOOK g_minHook = nullptr;
+#include <Geode/Geode.hpp>
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 
-static bool isGameTopLevel(HWND h) {
-    if (!h) return false;
-    HWND top = GetAncestor(h, GA_ROOT);
-    DWORD pid = 0;
-    GetWindowThreadProcessId(top, &pid);
-    return pid == GetCurrentProcessId();
+using namespace geode::prelude;
+
+LONG_PTR oWindowProc;
+bool newWindowProcSet = false;
+
+LRESULT CALLBACK nWindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
+    if(msg == WM_SETFOCUS) {
+        if (CCDirector* CCDirector = cocos2d::CCDirector::get()) {
+            CCDirector->getKeyboardDispatcher()->updateModifierKeys(false, false, false, false);
+        }
+    }
+
+    return CallWindowProc((WNDPROC)oWindowProc, hwnd, msg, wparam, lparam);
 }
 
-static void CALLBACK WinEvtProc(HWINEVENTHOOK, DWORD event, HWND hwnd, LONG, LONG, DWORD, DWORD) {
-    switch (event) {
-        case EVENT_SYSTEM_FOREGROUND: {
-            if (!isGameTopLevel(hwnd)) {
-                geode::queueInMainThread([] {
-                    if (auto director = cocos2d::CCDirector::get()) {
-                        director->getKeyboardDispatcher()->updateModifierKeys(false, false, false, false);
-                    }
-                });
-            }
-        } break;
-        case EVENT_SYSTEM_MINIMIZESTART: {
-            if (isGameTopLevel(hwnd)) {
-                geode::queueInMainThread([] {
-                    if (auto director = cocos2d::CCDirector::get()) {
-                        director->getKeyboardDispatcher()->updateModifierKeys(false, false, false, false);
-                    }
-                });
-            }
-        } break;
-    }
+HWND getWindowHandle() {
+    return WindowFromDC(wglGetCurrentDC());
 }
 
 $on_mod(Loaded) {
-    g_fgHook = SetWinEventHook(
-        EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_FOREGROUND,
-        nullptr, WinEvtProc, 0, 0, WINEVENT_OUTOFCONTEXT
-    );
-    g_minHook = SetWinEventHook(
-        EVENT_SYSTEM_MINIMIZESTART, EVENT_SYSTEM_MINIMIZESTART,
-        nullptr, WinEvtProc, 0, 0, WINEVENT_OUTOFCONTEXT
-    );
-}
-
-$on_mod(DataSaved) {
-    if (g_fgHook) { UnhookWinEvent(g_fgHook); g_fgHook = nullptr; }
-    if (g_minHook) { UnhookWinEvent(g_minHook); g_minHook = nullptr; }
-}
+    HWND hwnd = getWindowHandle();
+    if (hwnd && !oWindowProc) {
+        oWindowProc = SetWindowLongPtrA(getWindowHandle(), GWLP_WNDPROC, (LONG_PTR)nWindowProc);
+    }
+};
