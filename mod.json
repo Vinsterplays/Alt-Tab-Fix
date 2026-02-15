@@ -5,7 +5,7 @@
 	},
 	"id": "vinsterplays.alt_tab_fix",
 	"name": "Alt Tab Fix",
-	"version": "v1.2.0",
+	"version": "v1.2.1",
 	"developer": "vinsterplays",
 	"description": "Releases Alt after using Alt+tab",
 	"repository": "https://github.com/Vinsterplays/Alt-Tab-Fix",
