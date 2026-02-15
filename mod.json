@@ -1,5 +1,5 @@
 {
-	"geode": "4.8.0",
+	"geode": "5.0.0-beta.1",
 	"gd": {
 		"win": "2.2074"
 	},
@@ -7,7 +7,7 @@
 	"name": "Alt Tab Fix",
 	"version": "v1.2.0",
 	"developer": "vinsterplays",
-	"description": "Prevents the game from thinking alt is held after alt+tab",
+	"description": "Releases Alt after using Alt+tab",
 	"repository": "https://github.com/Vinsterplays/Alt-Tab-Fix",
 	"tags": ["universal", "enhancement", "bugfix"]
 }
